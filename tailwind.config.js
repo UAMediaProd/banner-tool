@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   content: [
     "./index.html",
@@ -14,6 +16,9 @@ module.exports = {
         'secondary-dark': '#aa0000',
       }
     },
+    screens: {
+      ...defaultTheme.screens,
+    }
   },
   plugins: [],
 }

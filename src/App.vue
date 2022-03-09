@@ -56,7 +56,7 @@
     <div class="control-section my-4">
       <div class="wrapper">
         <div class="grid grid-cols-12 gap-2">
-          <div class="col-span-6">
+          <div class="lg:col-span-6 col-span-12">
             <h3>Banner Type</h3>
             <div class="banner-type-buttons mb-2">
               <button
@@ -86,9 +86,9 @@
             </div>
 
           </div>
-          <div class="col-span-6">
+          <div class="lg:col-span-6 col-span-12">
               <h3>Banner Title</h3>
-            <div class="flex">
+            <div class="flex mb-4">
               <input type="text" v-model="title" class="w-5/6 border px-2 mr-2 my-2" placeholder="Banner Title" :maxlength="60">
               <span class="text-xs my-auto">{{ title.length + '/60'}}</span>
             </div>
@@ -98,12 +98,12 @@
               <h3 class="mr-4">Tagline</h3>
               <input type="checkbox" class="mr-2 my-auto" v-model="includeTagline" :disabled="isBasic">
             </div>
-            <div class="flex">
+            <div class="flex mb-4">
               <input type="text" v-model="tagline" class="w-5/6 border px-2 mr-2 my-2" placeholder="Tagline" :disabled="!includeTagline || isBasic" :maxlength="32">
               <span class="text-xs my-auto">{{ tagline.length + '/32'}}</span>
             </div>
 
-            <div class="flex">
+            <div class="flex mb-4">
               <h3 class="mr-4">Inlude 'make history.' Icon</h3>
               <input type="checkbox" id="makeHistory" class="mr-2 my-auto" v-model="makeHistory" :disabled="isBasic">
             </div>
@@ -133,12 +133,13 @@
 import { computed, ref } from 'vue'
 import domtoimage from 'dom-to-image';
 
+const imageSizeLimit = 5 * 1024 * 1024;
+
 const bannerTypeOptions = [
   { name: 'Shield Right', value: 'shield-right' },
   { name: 'Shield Left', value: 'shield-left' },
   { name: 'Basic', value: 'basic' }
 ]
-
 
 let bannerType = ref('shield-right');
 
@@ -162,8 +163,19 @@ const isBasic = computed(() => bannerType.value === 'basic')
 function openImage(event) {
   const files = event.target.files;
   if (!files.length) {
-    return;
+    return
   }
+
+  if (!files[0].type.match('image.*')) {
+    alert('Please select an image file. eg. jpg, png')
+    return
+  }
+
+  if (files[0].size > imageSizeLimit) {
+    alert('Image size exceeded 5MB limit. Please select a smaller image.')
+    return
+  }
+
   const reader = new FileReader();
   reader.onload = function(e) {
     image.value.url = e.target.result
