@@ -30,7 +30,7 @@
           
           <header v-if="bannerType === 'shield-left'" id="shield-left" class="adx-shield left">
             <div class="image left">
-              <img :src="image.url" alt="" class="center-center">
+              <img :src="image.url" alt="" class="center-center" :style="{ 'margin-top': image.y + 'px', 'margin-left': image.x + 'px'}">
             </div>
             <div v-if="makeHistory" class="make-history left">
               <img src="./assets/mh-stacked.jpg" alt="">
@@ -207,8 +207,10 @@ function moveImage(direction) {
 }
 
 function capture () {
-  domtoimage.toPng(document.getElementById(bannerType.value), { height: 400, width: 1200 })
-    .then(function (dataUrl) {
+  domtoimage.toPng(document.getElementById(bannerType.value), {
+    height: isBasic ? 250 : 400,
+    width: 1200,
+    }).then(function (dataUrl) {
       var link = document.createElement('a')
         if (typeof link.download !== 'string') {
           window.open(dataUrl)
