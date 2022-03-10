@@ -69,7 +69,27 @@
               </button>
             </div>
 
-            <h3>Image Upload</h3>
+            <h3>Image Options</h3>
+            <div class="image-presets flex my-2">
+              <button class="btn w-16 h-16" :class="presetImageClass('preset-computer')" :disabled="isBasic" @click="selectImage('preset-computer')">
+                <img id="preset-computer" src="./assets/preset-images/computer.png" alt="">
+              </button>
+              <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-grapes')" :disabled="isBasic" @click="selectImage('preset-grapes')">
+                <img id="preset-grapes" src="./assets/preset-images/grapes.jpg" alt="">
+              </button>
+              <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-lab')" :disabled="isBasic" @click="selectImage('preset-lab')">
+                <img id="preset-lab" src="./assets/preset-images/lab.jpg" alt="">
+              </button>
+              <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-library')" :disabled="isBasic" @click="selectImage('preset-library')">
+                <img id="preset-library" src="./assets/preset-images/library.png" alt="">
+              </button>
+              <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-braggs')" :disabled="isBasic" @click="selectImage('preset-braggs')">
+                <img id="preset-braggs" src="./assets/preset-images/braggs.png" alt="">
+              </button>
+              <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-iw')" :disabled="isBasic" @click="selectImage('preset-iw')">
+                <img id="preset-iw" src="./assets/preset-images/iw.png" alt="">
+              </button>
+            </div>
             <input type="file" id="uploadImage" class="btn-primary mt-2 mb-4" accept="image/*" :disabled="isBasic" @change="openImage($event)">
 
             <div class="flex my-2">
@@ -130,7 +150,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import domtoimage from 'dom-to-image';
 
 const imageSizeLimit = 5 * 1024 * 1024;
@@ -148,8 +168,8 @@ let tagline = ref("Here's a tagline")
 let includeTagline = ref(true)
 
 let image = ref({
-  url: 'src/assets/grapes.jpg',
-  key: 'grape',
+  url: '',
+  key: '',
   x: 0,
   y: 0
 })
@@ -159,6 +179,31 @@ let makeHistory = ref(true)
 let imageScale = ref(1)
 
 const isBasic = computed(() => bannerType.value === 'basic')
+
+watch(bannerType, (newVal, oldVal) => {
+    const presets = document.querySelectorAll('.image-presets button')
+  if (newVal === 'basic') {
+    presets.forEach(preset => preset.style.filter = 'grayscale(1)')
+  } else {
+    presets.forEach(preset => preset.style.filter = 'grayscale(0)')
+  }
+})
+
+onMounted(() => {
+  selectImage('preset-computer')
+})
+
+function selectImage(key) {
+  const selected = document.getElementById(key)
+  if (selected) {
+    image.value.url = selected.src
+    image.value.key = key
+  }
+}
+
+function presetImageClass(key) {
+  return !isBasic.value && image.value.key === key ? 'ring-2 ring-primary-darker' : ''
+}
 
 function openImage(event) {
   const files = event.target.files;
