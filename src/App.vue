@@ -19,8 +19,11 @@
             <div class="image">
               <img :src="image.url" alt="" class="center-center" :style="{ 'margin-top': image.y + 'px', 'margin-left': image.x + 'px'}">
             </div>
-            <div v-if="makeHistory" class="make-history">
+            <div v-if="iconSelected === 'makeHistory'" class="make-history">
               <img src="./assets/mh-stacked.jpg" alt="">
+            </div>
+            <div v-if="iconSelected === 'uoa'" class="uoa-icon">
+              <img src="./assets/logo.png" alt="">
             </div>
             <div class="text">
               <h1>{{ title }}</h1>
@@ -32,8 +35,11 @@
             <div class="image left">
               <img :src="image.url" alt="" class="center-center" :style="{ 'margin-top': image.y + 'px', 'margin-left': image.x + 'px'}">
             </div>
-            <div v-if="makeHistory" class="make-history left">
+            <div v-if="iconSelected === 'makeHistory'" class="make-history left">
               <img src="./assets/mh-stacked.jpg" alt="">
+            </div>
+            <div v-if="iconSelected === 'uoa'" class="uoa-icon left">
+              <img src="./assets/logo.png" alt="">
             </div>
             <div class="overlay"></div>
             <div class="text left">
@@ -123,9 +129,17 @@
               <span class="text-xs my-auto">{{ tagline.length + '/32'}}</span>
             </div>
 
-            <div class="flex mb-4">
-              <h3 class="mr-4">Inlude 'make history.' Icon</h3>
-              <input type="checkbox" id="makeHistory" class="mr-2 my-auto" v-model="makeHistory" :disabled="isBasic">
+            <h3 class="mr-4">Inlude Icon</h3>
+            <div class="flex my-2">
+              <button
+              v-for="icon in iconOptions"
+              v-bind:key="icon.value"
+              v-bind:class="{ 'bg-primary-dark ring-2 ring-primary-darker': iconSelected === icon.value }"
+              v-on:click="iconSelected = icon.value"
+              class="btn btn-primary mr-2 my-2"
+               :disabled="isBasic">
+              {{ icon.name }}
+              </button>
             </div>
 
           </div>
@@ -161,6 +175,12 @@ const bannerTypeOptions = [
   { name: 'Basic', value: 'basic' }
 ]
 
+const iconOptions = [
+  { name: 'make history.', value: 'makeHistory' },
+  { name: 'UoA', value: 'uoa' },
+  { name: 'None', value: 'none' }
+]
+
 let bannerType = ref('shield-right');
 
 let title = ref('Welcome to Cyber Security Fundamentals')
@@ -174,7 +194,7 @@ let image = ref({
   y: 0
 })
 
-let makeHistory = ref(true)
+let iconSelected = ref('makeHistory')
 
 let imageScale = ref(1)
 

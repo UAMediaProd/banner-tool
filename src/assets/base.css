@@ -132,17 +132,29 @@ header.adx-shield .image img.center-center {
     object-position: center center;
 }
 
-header.adx-shield .make-history {
+header.adx-shield .make-history,
+header.adx-shield .uoa-icon {
     grid-area: 1/4/1/4;
     display: grid;
-    margin: 1vw;
+    margin: 1vw auto;
 }
 
-header.adx-shield .make-history.left {
+header.adx-shield .uoa-icon {
+  margin: auto 1vw 2vw auto;
+}
+
+header.adx-shield .make-history.left,
+header.adx-shield .uoa-icon.left {
   grid-area: 1/1/1/1;
+  margin: 1vw;
 }
 
-header.adx-shield .make-history img {
+header.adx-shield .uoa-icon.left {
+  margin: auto 1vw 2vw 2vw;
+}
+
+header.adx-shield .make-history img,
+header.adx-shield .uoa-icon img {
     display: grid;
     width: 100%;
     align-self: end;
