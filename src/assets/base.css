@@ -177,6 +177,8 @@ header.adx-shield .text {
     border: none;
     background: none;
     text-align: left;
+    min-width: 350px;
+    min-height: 280px;
 }
 
 header.adx-shield .text.left {
