@@ -134,25 +134,23 @@
             </div>
 
             <h3 class="mr-4">Colour Themes</h3>
-            <div class="flex my-2">
-              <h5 class="mr-2 my-auto w-14">Shield</h5>
+            <div v-if="!isBasic" class="shield-themes flex my-2">
               <button
                 v-for="theme in shieldThemeOptions"
                 v-bind:key="theme.name"
                 v-bind:class="{ 'ring-2 ring-primary-darker': shieldTheme === theme.name && !isBasic }"
-                class="btn w-8 h-8 border ml-2"
+                class="btn w-8 h-8 border mr-2"
                 :style="{'background-image': `linear-gradient(to right bottom, ${theme.shieldBar} 50%, ${theme.bg} 50%)`}"
                 :disabled="isBasic"
                 @click="selectTheme(theme)">
               </button>
             </div>
-            <div class="flex my-2">
-              <h5 class="mr-2 my-auto w-14">Basic</h5>
+            <div v-if="isBasic" class="basic-themes flex my-2">
               <button
                 v-for="theme in basicThemeOptions"
                 v-bind:key="theme.name"
                 v-bind:class="{ 'ring-2 ring-primary-darker': basicTheme === theme.name && isBasic }"
-                class="btn w-8 h-8 border ml-2"
+                class="btn w-8 h-8 border mr-2"
                 :style="{'background-image': `linear-gradient(to right bottom, ${theme.left} 35%, ${theme.bg} 35% 65%, ${theme.right} 65%)`}"
                 :disabled="!isBasic"
                 @click="selectTheme(theme)">

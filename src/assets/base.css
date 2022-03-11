@@ -173,12 +173,11 @@ header.adx-shield .text {
     flex-direction: column;
     justify-content: flex-end;
     text-align: left;
-    margin: 4vw;
+    margin: 4vw 4vw 2vw 4vw;
     border: none;
     background: none;
     text-align: left;
     min-width: 350px;
-    min-height: 280px;
 }
 
 header.adx-shield .text.left {
@@ -193,7 +192,10 @@ header.adx-shield .text > * {
 
 header.adx-shield.basic .text {
   grid-area: 1/2/1/2;
-  margin-top: 7vw;
+  height: 250px;
+  margin-top: 0;
+  margin-bottom: 0;
+  justify-content: center;
 }
 
 header.adx-shield.basic .curve {
