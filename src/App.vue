@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="headerbar">
-      <div class="wrapper"><img src="./assets/uoa-logo.png" width="120" /></div>
+      <div class="wrapper my-2"><img src="./assets/uoa-logo.png" width="160" /></div>
     </div>
 
     <div class="main-content">
@@ -20,10 +20,10 @@
               <img :src="image.url" alt="" class="center-center" :style="{ 'margin-top': image.y + 'px', 'margin-left': image.x + 'px'}">
             </div>
             <div v-if="iconSelected === 'makeHistory'" class="make-history">
-              <img src="./assets/mh-stacked.jpg" alt="">
+              <img src="./assets/mh_logo.png" alt="">
             </div>
             <div v-if="iconSelected === 'uoa'" class="uoa-icon">
-              <img src="./assets/logo.png" alt="">
+              <img src="./assets/uni_logo.png" alt="">
             </div>
             <div class="text">
               <h1>{{ title }}</h1>
@@ -36,10 +36,10 @@
               <img :src="image.url" alt="" class="center-center" :style="{ 'margin-top': image.y + 'px', 'margin-left': image.x + 'px'}">
             </div>
             <div v-if="iconSelected === 'makeHistory'" class="make-history left">
-              <img src="./assets/mh-stacked.jpg" alt="">
+              <img src="./assets/mh_logo.png" alt="">
             </div>
             <div v-if="iconSelected === 'uoa'" class="uoa-icon left">
-              <img src="./assets/logo.png" alt="">
+              <img src="./assets/uni_logo.png" alt="">
             </div>
             <div class="overlay"></div>
             <div class="text left">
@@ -105,10 +105,14 @@
 
             <div class="flex my-2">
               <h5 class="mr-2 my-auto">Move Image</h5>
-              <button v-on:click="moveImage('up')" class="btn btn-primary mr-2" :disabled="isBasic">↑</button>
-              <button v-on:click="moveImage('down')" class="btn btn-primary mr-2" :disabled="isBasic">↓</button>
-              <button v-on:click="moveImage('left')" class="btn btn-primary mr-2" :disabled="isBasic">←</button>
-              <button v-on:click="moveImage('right')" class="btn btn-primary mr-2" :disabled="isBasic">→</button>
+              <button
+                v-for="direction in moveImageOptions"
+                v-bind:key="direction.value"
+                v-on:click="moveImage(direction.value)"
+                class="btn btn-primary mr-2"
+                :disabled="isBasic">
+                {{ direction.display }}
+              </button>
             </div>
 
           </div>
@@ -127,6 +131,32 @@
             <div class="flex mb-4">
               <input type="text" v-model="tagline" class="w-5/6 border px-2 mr-2 my-2" placeholder="Tagline" :disabled="!includeTagline || isBasic" :maxlength="32">
               <span class="text-xs my-auto">{{ tagline.length + '/32'}}</span>
+            </div>
+
+            <h3 class="mr-4">Colour Themes</h3>
+            <div class="flex my-2">
+              <h5 class="mr-2 my-auto w-14">Shield</h5>
+              <button
+                v-for="theme in shieldThemeOptions"
+                v-bind:key="theme.name"
+                v-bind:class="{ 'ring-2 ring-primary-darker': shieldTheme === theme.name && !isBasic }"
+                class="btn w-8 h-8 border ml-2"
+                :style="{'background-image': `linear-gradient(to right bottom, ${theme.shieldBar} 50%, ${theme.bg} 50%)`}"
+                :disabled="isBasic"
+                @click="selectTheme(theme)">
+              </button>
+            </div>
+            <div class="flex my-2">
+              <h5 class="mr-2 my-auto w-14">Basic</h5>
+              <button
+                v-for="theme in basicThemeOptions"
+                v-bind:key="theme.name"
+                v-bind:class="{ 'ring-2 ring-primary-darker': basicTheme === theme.name && isBasic }"
+                class="btn w-8 h-8 border ml-2"
+                :style="{'background-image': `linear-gradient(to right bottom, ${theme.left} 35%, ${theme.bg} 35% 65%, ${theme.right} 65%)`}"
+                :disabled="!isBasic"
+                @click="selectTheme(theme)">
+              </button>
             </div>
 
             <h3 class="mr-4">Inlude Icon</h3>
@@ -156,9 +186,11 @@
 
     <div class="footer">
       <div class="wrapper">
-        <p>&copy; The University of Adelaide</p>
-        <img src="./assets/uoa-logo.png" width="220" style="float: right" />
+        <div class="flex justify-between my-4">
+          <p class="my-auto">&copy; The University of Adelaide</p>
+          <img src="./assets/uoa-logo.png" width="200" />
       </div>
+        </div>
     </div>
   </div>
 </template>
@@ -173,6 +205,31 @@ const bannerTypeOptions = [
   { name: 'Shield Right', value: 'shield-right' },
   { name: 'Shield Left', value: 'shield-left' },
   { name: 'Basic', value: 'basic' }
+]
+
+const moveImageOptions = [
+  { display: '↑', value: 'up' },
+  { display: '↓', value: 'down' },
+  { display: '←', value: 'left' },
+  { display: '→', value: 'right' }
+]
+
+const shieldThemeOptions = [
+  { name: 'red-navy', shieldBar: '#d40000', bg: '#102535' },
+  { name: 'blue-navy', shieldBar: '#005a9c', bg: '#102535' },
+  { name: 'darker-navy', shieldBar: '#004B83', bg: '#102535' },
+  { name: 'grey-navy', shieldBar: '#40515d', bg: '#102535' },
+  { name: 'pale-navy', shieldBar: '#BBDCEB', bg: '#102535' },
+]
+
+const basicThemeOptions = [
+  { name: 'red-blue', left: '#d40000', right: '#005a9c', bg: '#102535' },
+  { name: 'blue-red', left: '#005a9c', right: '#d40000', bg: '#102535' },
+  { name: 'red', left: '#d40000', right: '#d40000', bg: '#102535' },
+  { name: 'blue', left: '#005a9c', right: '#005a9c', bg: '#102535' },
+  { name: 'darker', left: '#004B83', right: '#004B83', bg: '#102535' },
+  { name: 'navy-grey', left: '#102535', right: '#102535', bg: '#40515d' },
+  { name: 'grey-navy', left: '#40515d', right: '#40515d', bg: '#102535' },
 ]
 
 const iconOptions = [
@@ -197,6 +254,10 @@ let image = ref({
 let iconSelected = ref('makeHistory')
 
 let imageScale = ref(1)
+
+let shieldTheme = ref('red-navy')
+
+let basicTheme = ref('red-blue')
 
 const isBasic = computed(() => bannerType.value === 'basic')
 
@@ -271,9 +332,31 @@ function moveImage(direction) {
   }
 }
 
+function selectTheme(theme) {
+  if (isBasic.value) {
+    const curveLeft = document.querySelector(`.adx-shield.basic .curve.left`)
+    curveLeft.style.background = theme.left
+
+    const curveRight = document.querySelector(`.adx-shield.basic .curve.right`)
+    curveRight.style.background = theme.right
+
+    const basicBg = document.querySelector(`.adx-shield.basic`)
+    basicBg.style.background = theme.bg
+
+    basicTheme.value = theme.name
+  } else {
+    const targets = document.querySelectorAll('.adx-shield:not(.basic)')
+    targets.forEach(el => {
+      el.style.borderColor = theme.shieldBar
+      el.style.background = theme.bg
+    })
+    shieldTheme.value = theme.name
+  }
+}
+
 function capture () {
   domtoimage.toPng(document.getElementById(bannerType.value), {
-    height: isBasic ? 250 : 400,
+    height: isBasic.value ? 250 : 400,
     width: 1200,
     }).then(function (dataUrl) {
       var link = document.createElement('a')
