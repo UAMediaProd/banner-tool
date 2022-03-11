@@ -129,12 +129,12 @@
               <input type="checkbox" class="mr-2 my-auto" v-model="includeTagline" :disabled="isBasic">
             </div>
             <div class="flex mb-4">
-              <input type="text" v-model="tagline" class="w-5/6 border px-2 mr-2 my-2" placeholder="Tagline" :disabled="!includeTagline || isBasic" :maxlength="32">
-              <span class="text-xs my-auto">{{ tagline.length + '/32'}}</span>
+              <input type="text" v-model="tagline" class="w-5/6 border px-2 mr-2 my-2" placeholder="Tagline" :disabled="!includeTagline || isBasic" :maxlength="45">
+              <span class="text-xs my-auto">{{ tagline.length + '/45'}}</span>
             </div>
 
             <h3 class="mr-4">Colour Themes</h3>
-            <div v-if="!isBasic" class="shield-themes flex my-2">
+            <div v-if="!isBasic" class="shield-themes flex mt-2 mb-4">
               <button
                 v-for="theme in shieldThemeOptions"
                 v-bind:key="theme.name"
@@ -145,7 +145,7 @@
                 @click="selectTheme(theme)">
               </button>
             </div>
-            <div v-if="isBasic" class="basic-themes flex my-2">
+            <div v-if="isBasic" class="basic-themes flex mt-2 mb-4">
               <button
                 v-for="theme in basicThemeOptions"
                 v-bind:key="theme.name"
@@ -265,6 +265,7 @@ watch(bannerType, (newVal, oldVal) => {
     presets.forEach(preset => preset.style.filter = 'grayscale(1)')
   } else {
     presets.forEach(preset => preset.style.filter = 'grayscale(0)')
+    resetImageState()
   }
 })
 
@@ -277,6 +278,7 @@ function selectImage(key) {
   if (selected) {
     image.value.url = selected.src
     image.value.key = key
+    resetImageState()
   }
 }
 
@@ -306,11 +308,14 @@ function openImage(event) {
   }
   reader.readAsDataURL(files[0])
   image.value.key = 'upload'
+  resetImageState()
 }
 
 function resizeImage() {
-  const image = document.querySelector(`#${bannerType.value} .image img`)
-  image.style.transform = `scale(${imageScale.value})`
+  const image = document.querySelector(`.adx-shield .image img`)
+  if (image) {
+    image.style.transform = `scale(${imageScale.value})`
+  }
 }
 
 function moveImage(direction) {
@@ -328,6 +333,13 @@ function moveImage(direction) {
       image.value.x += 10
       break;
   }
+}
+
+function resetImageState() {
+  image.value.x = 0
+  image.value.y = 0
+  imageScale.value = 1
+  resizeImage()
 }
 
 function selectTheme(theme) {
