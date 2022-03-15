@@ -100,7 +100,8 @@
 
             <div class="flex my-2">
               <h5 class="mr-2">Resize Image</h5>
-              <input type="range" v-model="imageScale" min="1" max="2.5" step="0.05" class="w-2/5" :disabled="isBasic" @change="resizeImage()">
+              <input type="range" v-model="imageScale" min="1" max="2.5" step="0.05" class="w-2/5" :disabled="isBasic" list="resizeStepList">
+              <datalist id="resizeStepList"><option v-for="index in 31" :key="index">{{ 1 + (index - 1) * 0.05 }}</option></datalist>
             </div>
 
             <div class="flex my-2">
@@ -108,7 +109,9 @@
               <button
                 v-for="direction in moveImageOptions"
                 v-bind:key="direction.value"
-                v-on:click="moveImage(direction.value)"
+                @click="moveImage(direction.value)"
+                @mousedown="onMoveImageStart(direction.value)"
+                @mouseup="onMoveImageStop()"
                 class="btn btn-primary mr-2"
                 :disabled="isBasic">
                 {{ direction.display }}
@@ -195,7 +198,7 @@
 
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import domtoimage from 'dom-to-image';
+import domtoimage from 'dom-to-image'
 
 const imageSizeLimit = 5 * 1024 * 1024;
 
@@ -257,6 +260,8 @@ let shieldTheme = ref('red-navy')
 
 let basicTheme = ref('red-blue')
 
+let moveImageInterval = ref(null)
+
 const isBasic = computed(() => bannerType.value === 'basic')
 
 watch(bannerType, (newVal, oldVal) => {
@@ -267,6 +272,10 @@ watch(bannerType, (newVal, oldVal) => {
     presets.forEach(preset => preset.style.filter = 'grayscale(0)')
     resetImageState()
   }
+})
+
+watch(imageScale, (newVal, oldVal) => {
+  resizeImage()
 })
 
 onMounted(() => {
@@ -333,6 +342,16 @@ function moveImage(direction) {
       image.value.x += 10
       break;
   }
+}
+
+function onMoveImageStart (direction) {
+  moveImageInterval.value = setInterval(() => {
+    moveImage(direction)
+  }, 100)
+}
+
+function onMoveImageStop () {
+  clearInterval(moveImageInterval.value)
 }
 
 function resetImageState() {
