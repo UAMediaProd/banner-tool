@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div class="headerbar">
-      <div class="wrapper my-2"><img src="./assets/uoa-logo.png" width="160" /></div>
+      <div class="wrapper my-2"><img src="./assets/uoa-logo.png" width="160" alt="" /></div>
     </div>
 
     <div class="main-content">
@@ -30,7 +30,7 @@
               <h5 v-if="includeTagline">{{ tagline }}</h5>
             </div>
           </header>
-          
+
           <header v-if="bannerType === 'shield-left'" id="shield-left" class="adx-shield left">
             <div class="image left">
               <img :src="image.url" alt="" class="center-center" :style="{ 'margin-top': image.y + 'px', 'margin-left': image.x + 'px'}">
@@ -47,7 +47,7 @@
               <h5 v-if="includeTagline">{{ tagline }}</h5>
             </div>
           </header>
-          
+
           <header v-if="isBasic" id="basic" class="adx-shield basic">
             <div class="curve left"></div>
             <div class="text">
@@ -66,12 +66,12 @@
             <h3>Banner Type</h3>
             <div class="banner-type-buttons mb-2">
               <button
-              v-for="(type, index) in bannerTypeOptions"
-              v-bind:key="index"
-              v-bind:class="{ 'bg-primary-dark ring-2 ring-primary-darker': bannerType === type.value }"
-              v-on:click="bannerType = type.value"
-              class="btn btn-primary mr-2 my-2">
-              {{ type.name }}
+                v-for="(type, index) in bannerTypeOptions"
+                v-bind:key="index"
+                v-bind:class="{ 'bg-primary-dark ring-2 ring-primary-darker': bannerType === type.value }"
+                v-on:click="bannerType = type.value"
+                class="btn btn-primary mr-2 my-2">
+                {{ type.name }}
               </button>
             </div>
 
@@ -101,7 +101,9 @@
             <div class="flex my-2">
               <h5 class="mr-2">Resize Image</h5>
               <input type="range" v-model="imageScale" min="1" max="2.5" step="0.05" class="w-2/5" :disabled="isBasic" list="resizeStepList">
-              <datalist id="resizeStepList"><option v-for="index in 31" :key="index">{{ 1 + (index - 1) * 0.05 }}</option></datalist>
+              <datalist id="resizeStepList">
+                <option v-for="index in 31" :key="index">{{ 1 + (index - 1) * 0.05 }}</option>
+              </datalist>
             </div>
 
             <div class="flex my-2">
@@ -120,10 +122,10 @@
 
           </div>
           <div class="lg:col-span-6 col-span-12">
-              <h3>Banner Title</h3>
+            <h3>Banner Title</h3>
             <div class="flex mb-4">
               <input type="text" v-model="title" class="w-5/6 border px-2 mr-2 my-2" placeholder="Banner Title" :maxlength="60">
-              <span class="text-xs my-auto">{{ title.length + '/60'}}</span>
+              <span class="text-xs my-auto">{{ title.length + '/60' }}</span>
             </div>
 
 
@@ -133,7 +135,7 @@
             </div>
             <div class="flex mb-4">
               <input type="text" v-model="tagline" class="w-5/6 border px-2 mr-2 my-2" placeholder="Tagline" :disabled="!includeTagline || isBasic" :maxlength="45">
-              <span class="text-xs my-auto">{{ tagline.length + '/45'}}</span>
+              <span class="text-xs my-auto">{{ tagline.length + '/45' }}</span>
             </div>
 
             <h3 class="mr-4">Colour Themes</h3>
@@ -160,16 +162,16 @@
               </button>
             </div>
 
-            <h3 class="mr-4">Inlude Icon</h3>
+            <h3 class="mr-4">Include Icon</h3>
             <div class="flex my-2">
               <button
-              v-for="icon in iconOptions"
-              v-bind:key="icon.value"
-              v-bind:class="{ 'bg-primary-dark ring-2 ring-primary-darker': iconSelected === icon.value }"
-              v-on:click="iconSelected = icon.value"
-              class="btn btn-primary mr-2 my-2"
-               :disabled="isBasic">
-              {{ icon.name }}
+                v-for="icon in iconOptions"
+                v-bind:key="icon.value"
+                v-bind:class="{ 'bg-primary-dark ring-2 ring-primary-darker': iconSelected === icon.value }"
+                v-on:click="iconSelected = icon.value"
+                class="btn btn-primary mr-2 my-2"
+                :disabled="isBasic">
+                {{ icon.name }}
               </button>
             </div>
 
@@ -179,19 +181,19 @@
     </div>
 
     <div class="download-section mt-4 py-8 text-center">
-        <h3 class="text-center mb-4">Upon Completion</h3>
-        <div>
-          <button class="btn-secondary" @click="capture">Download Banner</button>
-        </div>
+      <h3 class="text-center mb-4">Upon Completion</h3>
+      <div>
+        <button class="btn-secondary" @click="capture">Download Banner</button>
+      </div>
     </div>
 
     <div class="footer">
       <div class="wrapper">
         <div class="flex justify-between my-4">
           <p class="my-auto">&copy; The University of Adelaide</p>
-          <img src="./assets/uoa-logo.png" width="200" />
-      </div>
+          <img src="./assets/uoa-logo.png" width="200" alt="" />
         </div>
+      </div>
     </div>
   </div>
 </template>
@@ -264,8 +266,8 @@ let moveImageInterval = ref(null)
 
 const isBasic = computed(() => bannerType.value === 'basic')
 
-watch(bannerType, (newVal, oldVal) => {
-    const presets = document.querySelectorAll('.image-presets button')
+watch(bannerType, (newVal) => {
+  const presets = document.querySelectorAll('.image-presets button')
   if (newVal === 'basic') {
     presets.forEach(preset => preset.style.filter = 'grayscale(1)')
   } else {
@@ -274,7 +276,7 @@ watch(bannerType, (newVal, oldVal) => {
   }
 })
 
-watch(imageScale, (newVal, oldVal) => {
+watch(imageScale, () => {
   resizeImage()
 })
 
@@ -282,7 +284,7 @@ onMounted(() => {
   selectImage('preset-computer')
 })
 
-function selectImage(key) {
+function selectImage (key) {
   const selected = document.getElementById(key)
   if (selected) {
     image.value.url = selected.src
@@ -291,11 +293,11 @@ function selectImage(key) {
   }
 }
 
-function presetImageClass(key) {
+function presetImageClass (key) {
   return !isBasic.value && image.value.key === key ? 'ring-2 ring-primary-darker' : ''
 }
 
-function openImage(event) {
+function openImage (event) {
   const files = event.target.files;
   if (!files.length) {
     return
@@ -312,7 +314,7 @@ function openImage(event) {
   }
 
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = function (e) {
     image.value.url = e.target.result
   }
   reader.readAsDataURL(files[0])
@@ -320,14 +322,14 @@ function openImage(event) {
   resetImageState()
 }
 
-function resizeImage() {
+function resizeImage () {
   const image = document.querySelector(`.adx-shield .image img`)
   if (image) {
     image.style.transform = `scale(${imageScale.value})`
   }
 }
 
-function moveImage(direction) {
+function moveImage (direction) {
   switch (direction) {
     case 'up':
       image.value.y -= 10
@@ -354,14 +356,14 @@ function onMoveImageStop () {
   clearInterval(moveImageInterval.value)
 }
 
-function resetImageState() {
+function resetImageState () {
   image.value.x = 0
   image.value.y = 0
   imageScale.value = 1
   resizeImage()
 }
 
-function selectTheme(theme) {
+function selectTheme (theme) {
   if (isBasic.value) {
     const curveLeft = document.querySelector(`.adx-shield.basic .curve.left`)
     curveLeft.style.background = theme.left
@@ -387,18 +389,17 @@ function capture () {
   domtoimage.toPng(document.getElementById(bannerType.value), {
     height: isBasic.value ? 250 : 400,
     width: 1200,
-    }).then(function (dataUrl) {
-      var link = document.createElement('a')
-        if (typeof link.download !== 'string') {
-          window.open(dataUrl)
-        } else {
-          link.download = 'banner.png'
-          link.href = dataUrl
-          link.click()
-        }
-    })
-    .catch(function (error) {
-      console.error('oops, something went wrong!', error)
-    })
+  }).then(function (dataUrl) {
+    const link = document.createElement('a')
+    if (typeof link.download !== 'string') {
+      window.open(dataUrl)
+    } else {
+      link.download = 'banner.png'
+      link.href = dataUrl
+      link.click()
+    }
+  }).catch(function (e) {
+    console.error('oops, something went wrong!', e)
+  })
 }
 </script>
