@@ -1,197 +1,201 @@
 <template>
-  <div id="app">
-    <div class="headerbar">
-      <div class="wrapper my-2"><img src="./assets/uoa-logo.png" width="160" alt="" /></div>
-    </div>
-
-    <div class="main-content">
-      <div class="lead-section">
-        <div class="wrapper">
-          <h1 class="lead-title mt-8">Banner Tool</h1>
-          <p class="lead-text mt-4 mb-6">
-            The banner tool allows you to create custom banners that can be added to your LMS subjects.
-          </p>
-        </div>
+  <div id="app" class="min-h-screen flex flex-col justify-between">
+    <div>
+      <div class="headerbar">
+        <div class="wrapper my-2"><img src="./assets/uoa-logo.png" width="160" alt="" /></div>
       </div>
-      <div class="banner-section">
-        <div class="wrapper">
-          <header v-if="bannerType === 'shield-right'" id="shield-right" class="adx-shield right">
-            <div class="image">
-              <img :src="image.url" alt="" class="center-center" :style="{ 'margin-top': image.y + 'px', 'margin-left': image.x + 'px'}">
-            </div>
-            <div v-if="iconSelected === 'makeHistory'" class="make-history">
-              <img src="./assets/mh_logo.png" alt="">
-            </div>
-            <div v-if="iconSelected === 'uoa'" class="uoa-icon">
-              <img src="./assets/uni_logo.png" alt="">
-            </div>
-            <div class="text">
-              <h1>{{ title }}</h1>
-              <h5 v-if="includeTagline">{{ tagline }}</h5>
-            </div>
-          </header>
 
-          <header v-if="bannerType === 'shield-left'" id="shield-left" class="adx-shield left">
-            <div class="image left">
-              <img :src="image.url" alt="" class="center-center" :style="{ 'margin-top': image.y + 'px', 'margin-left': image.x + 'px'}">
-            </div>
-            <div v-if="iconSelected === 'makeHistory'" class="make-history left">
-              <img src="./assets/mh_logo.png" alt="">
-            </div>
-            <div v-if="iconSelected === 'uoa'" class="uoa-icon left">
-              <img src="./assets/uni_logo.png" alt="">
-            </div>
-            <div class="overlay"></div>
-            <div class="text left">
-              <h1>{{ title }}</h1>
-              <h5 v-if="includeTagline">{{ tagline }}</h5>
-            </div>
-          </header>
-
-          <header v-if="isBasic" id="basic" class="adx-shield basic">
-            <div class="curve left"></div>
-            <div class="text">
-              <h1>{{ title }}</h1>
-            </div>
-            <div class="curve right"></div>
-          </header>
-        </div>
-      </div>
-    </div>
-
-    <div class="control-section my-4">
-      <div class="wrapper">
-        <div class="grid grid-cols-12 gap-2">
-          <div class="lg:col-span-6 col-span-12">
-            <h3>Banner Type</h3>
-            <div class="banner-type-buttons mb-2">
-              <button
-                v-for="(type, index) in bannerTypeOptions"
-                v-bind:key="index"
-                v-bind:class="{ 'bg-primary-dark ring-2 ring-primary-darker': bannerType === type.value }"
-                v-on:click="bannerType = type.value"
-                class="btn btn-primary mr-2 my-2">
-                {{ type.name }}
-              </button>
-            </div>
-
-            <h3>Image Options</h3>
-            <div class="image-presets flex my-2">
-              <button class="btn w-16 h-16" :class="presetImageClass('preset-computer')" :disabled="isBasic" @click="selectImage('preset-computer')">
-                <img id="preset-computer" src="./assets/preset-images/computer.png" alt="">
-              </button>
-              <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-grapes')" :disabled="isBasic" @click="selectImage('preset-grapes')">
-                <img id="preset-grapes" src="./assets/preset-images/grapes.jpg" alt="">
-              </button>
-              <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-lab')" :disabled="isBasic" @click="selectImage('preset-lab')">
-                <img id="preset-lab" src="./assets/preset-images/lab.jpg" alt="">
-              </button>
-              <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-library')" :disabled="isBasic" @click="selectImage('preset-library')">
-                <img id="preset-library" src="./assets/preset-images/library.png" alt="">
-              </button>
-              <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-braggs')" :disabled="isBasic" @click="selectImage('preset-braggs')">
-                <img id="preset-braggs" src="./assets/preset-images/braggs.png" alt="">
-              </button>
-              <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-iw')" :disabled="isBasic" @click="selectImage('preset-iw')">
-                <img id="preset-iw" src="./assets/preset-images/iw.png" alt="">
-              </button>
-            </div>
-            <input type="file" id="uploadImage" class="btn-primary mt-2 mb-4" accept="image/*" :disabled="isBasic" @change="openImage($event)">
-
-            <div class="flex my-2">
-              <h5 class="mr-2">Resize Image</h5>
-              <input type="range" v-model="imageScale" min="1" max="2.5" step="0.05" class="w-2/5" :disabled="isBasic" list="resizeStepList">
-              <datalist id="resizeStepList">
-                <option v-for="index in 31" :key="index">{{ 1 + (index - 1) * 0.05 }}</option>
-              </datalist>
-            </div>
-
-            <div class="flex my-2">
-              <h5 class="mr-2 my-auto">Move Image</h5>
-              <button
-                v-for="direction in moveImageOptions"
-                v-bind:key="direction.value"
-                @click="moveImage(direction.value)"
-                @mousedown="onMoveImageStart(direction.value)"
-                @mouseup="onMoveImageStop()"
-                class="btn btn-primary mr-2"
-                :disabled="isBasic">
-                {{ direction.display }}
-              </button>
-            </div>
-
+      <div class="main-content">
+        <div class="lead-section">
+          <div class="wrapper">
+            <h1 class="lead-title mt-8">Banner Tool</h1>
+            <p class="lead-text mt-4 mb-6">
+              The banner tool allows you to create custom banners that can be added to your LMS subjects.
+            </p>
           </div>
-          <div class="lg:col-span-6 col-span-12">
-            <h3>Banner Title</h3>
-            <div class="flex mb-4">
-              <input type="text" v-model="title" class="w-5/6 border px-2 mr-2 my-2" placeholder="Banner Title" :maxlength="60">
-              <span class="text-xs my-auto">{{ title.length + '/60' }}</span>
-            </div>
+        </div>
+        <div class="banner-section">
+          <div class="wrapper">
+            <header v-if="bannerType === 'shield-right'" id="shield-right" class="adx-shield right">
+              <div class="image">
+                <img :src="image.url" alt="" class="center-center" :style="{ 'margin-top': image.y + 'px', 'margin-left': image.x + 'px'}">
+              </div>
+              <div v-if="iconSelected === 'makeHistory'" class="make-history">
+                <img src="./assets/mh_logo.png" alt="">
+              </div>
+              <div v-if="iconSelected === 'uoa'" class="uoa-icon">
+                <img src="./assets/uni_logo.png" alt="">
+              </div>
+              <div class="text">
+                <h1>{{ title }}</h1>
+                <h5 v-if="includeTagline">{{ tagline }}</h5>
+              </div>
+            </header>
 
+            <header v-if="bannerType === 'shield-left'" id="shield-left" class="adx-shield left">
+              <div class="image left">
+                <img :src="image.url" alt="" class="center-center" :style="{ 'margin-top': image.y + 'px', 'margin-left': image.x + 'px'}">
+              </div>
+              <div v-if="iconSelected === 'makeHistory'" class="make-history left">
+                <img src="./assets/mh_logo.png" alt="">
+              </div>
+              <div v-if="iconSelected === 'uoa'" class="uoa-icon left">
+                <img src="./assets/uni_logo.png" alt="">
+              </div>
+              <div class="overlay"></div>
+              <div class="text left">
+                <h1>{{ title }}</h1>
+                <h5 v-if="includeTagline">{{ tagline }}</h5>
+              </div>
+            </header>
 
-            <div class="flex">
-              <h3 class="mr-4">Tagline</h3>
-              <input type="checkbox" class="mr-2 my-auto" v-model="includeTagline" :disabled="isBasic">
-            </div>
-            <div class="flex mb-4">
-              <input type="text" v-model="tagline" class="w-5/6 border px-2 mr-2 my-2" placeholder="Tagline" :disabled="!includeTagline || isBasic" :maxlength="45">
-              <span class="text-xs my-auto">{{ tagline.length + '/45' }}</span>
-            </div>
-
-            <h3 class="mr-4">Colour Themes</h3>
-            <div v-if="!isBasic" class="shield-themes flex mt-2 mb-4">
-              <button
-                v-for="theme in shieldThemeOptions"
-                v-bind:key="theme.name"
-                v-bind:class="{ 'ring-2 ring-primary-darker': shieldTheme === theme.name && !isBasic }"
-                class="btn w-8 h-8 border mr-2"
-                :style="{'background-image': `linear-gradient(to right bottom, ${theme.shieldBar} 50%, ${theme.bg} 50%)`}"
-                :disabled="isBasic"
-                @click="selectTheme(theme)">
-              </button>
-            </div>
-            <div v-if="isBasic" class="basic-themes flex mt-2 mb-4">
-              <button
-                v-for="theme in basicThemeOptions"
-                v-bind:key="theme.name"
-                v-bind:class="{ 'ring-2 ring-primary-darker': basicTheme === theme.name && isBasic }"
-                class="btn w-8 h-8 border mr-2"
-                :style="{'background-image': `linear-gradient(to right bottom, ${theme.left} 35%, ${theme.bg} 35% 65%, ${theme.right} 65%)`}"
-                :disabled="!isBasic"
-                @click="selectTheme(theme)">
-              </button>
-            </div>
-
-            <h3 class="mr-4">Include Icon</h3>
-            <div class="flex my-2">
-              <button
-                v-for="icon in iconOptions"
-                v-bind:key="icon.value"
-                v-bind:class="{ 'bg-primary-dark ring-2 ring-primary-darker': iconSelected === icon.value }"
-                v-on:click="iconSelected = icon.value"
-                class="btn btn-primary mr-2 my-2"
-                :disabled="isBasic">
-                {{ icon.name }}
-              </button>
-            </div>
-
+            <header v-if="isBasic" id="basic" class="adx-shield basic">
+              <div class="curve left"></div>
+              <div class="text">
+                <h1>{{ title }}</h1>
+              </div>
+              <div class="curve right"></div>
+            </header>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="download-section mt-4 py-8 text-center">
-      <h3 class="text-center mb-4">Upon Completion</h3>
-      <div>
-        <button class="btn-secondary" @click="capture">Download Banner</button>
+      <div class="control-section my-4">
+        <div class="wrapper">
+          <div class="grid grid-cols-12 gap-2">
+            <div class="lg:col-span-6 col-span-12">
+              <h3>Banner Type</h3>
+              <div class="banner-type-buttons mb-2">
+                <button
+                  v-for="(type, index) in bannerTypeOptions"
+                  v-bind:key="index"
+                  v-bind:class="{ 'bg-primary-dark ring-2 ring-primary-darker': bannerType === type.value }"
+                  v-on:click="bannerType = type.value"
+                  class="btn btn-primary mr-2 my-2">
+                  {{ type.name }}
+                </button>
+              </div>
+
+              <h3>Image Options</h3>
+              <div class="image-presets flex my-2">
+                <button class="btn w-16 h-16" :class="presetImageClass('preset-computer')" :disabled="isBasic" @click="selectImage('preset-computer')">
+                  <img id="preset-computer" src="./assets/preset-images/computer.png" alt="">
+                </button>
+                <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-grapes')" :disabled="isBasic" @click="selectImage('preset-grapes')">
+                  <img id="preset-grapes" src="./assets/preset-images/grapes.jpg" alt="">
+                </button>
+                <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-lab')" :disabled="isBasic" @click="selectImage('preset-lab')">
+                  <img id="preset-lab" src="./assets/preset-images/lab.jpg" alt="">
+                </button>
+                <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-library')" :disabled="isBasic" @click="selectImage('preset-library')">
+                  <img id="preset-library" src="./assets/preset-images/library.png" alt="">
+                </button>
+                <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-braggs')" :disabled="isBasic" @click="selectImage('preset-braggs')">
+                  <img id="preset-braggs" src="./assets/preset-images/braggs.png" alt="">
+                </button>
+                <button class="btn w-16 h-16 ml-2" :class="presetImageClass('preset-iw')" :disabled="isBasic" @click="selectImage('preset-iw')">
+                  <img id="preset-iw" src="./assets/preset-images/iw.png" alt="">
+                </button>
+              </div>
+              <input type="file" id="uploadImage" class="btn-primary mt-2 mb-4" accept="image/*" :disabled="isBasic" @change="openImage($event)">
+
+              <div class="flex my-2">
+                <h5 class="mr-2">Resize Image</h5>
+                <input type="range" v-model="imageScale" min="1" max="2.5" step="0.05" class="w-2/5" :disabled="isBasic" list="resizeStepList">
+                <datalist id="resizeStepList">
+                  <option v-for="index in 31" :key="index">{{ 1 + (index - 1) * 0.05 }}</option>
+                </datalist>
+              </div>
+
+              <div class="flex my-2">
+                <h5 class="mr-2 my-auto">Move Image</h5>
+                <button
+                  v-for="direction in moveImageOptions"
+                  v-bind:key="direction.value"
+                  @click="moveImage(direction.value)"
+                  @mousedown="onMoveImageStart(direction.value)"
+                  @mouseup="onMoveImageStop()"
+                  class="btn btn-primary mr-2"
+                  :disabled="isBasic">
+                  {{ direction.display }}
+                </button>
+              </div>
+
+            </div>
+            <div class="lg:col-span-6 col-span-12">
+              <h3>Banner Title</h3>
+              <div class="flex mb-4">
+                <input type="text" v-model="title" class="w-5/6 border px-2 mr-2 my-2" placeholder="Banner Title" :maxlength="60">
+                <span class="text-xs my-auto">{{ title.length + '/60' }}</span>
+              </div>
+
+
+              <div class="flex">
+                <h3 class="mr-4">Tagline</h3>
+                <input type="checkbox" class="mr-2 my-auto" v-model="includeTagline" :disabled="isBasic">
+              </div>
+              <div class="flex mb-4">
+                <input type="text" v-model="tagline" class="w-5/6 border px-2 mr-2 my-2" placeholder="Tagline" :disabled="!includeTagline || isBasic" :maxlength="45">
+                <span class="text-xs my-auto">{{ tagline.length + '/45' }}</span>
+              </div>
+
+              <h3 class="mr-4">Colour Themes</h3>
+              <div v-if="!isBasic" class="shield-themes flex mt-2 mb-4">
+                <button
+                  v-for="theme in shieldThemeOptions"
+                  v-bind:key="theme.name"
+                  v-bind:class="{ 'ring-2 ring-primary-darker': shieldTheme === theme.name && !isBasic }"
+                  class="btn w-8 h-8 border mr-2"
+                  :style="{'background-image': `linear-gradient(to right bottom, ${theme.shieldBar} 50%, ${theme.bg} 50%)`}"
+                  :disabled="isBasic"
+                  @click="selectTheme(theme)">
+                </button>
+              </div>
+              <div v-if="isBasic" class="basic-themes flex mt-2 mb-4">
+                <button
+                  v-for="theme in basicThemeOptions"
+                  v-bind:key="theme.name"
+                  v-bind:class="{ 'ring-2 ring-primary-darker': basicTheme === theme.name && isBasic }"
+                  class="btn w-8 h-8 border mr-2"
+                  :style="{'background-image': `linear-gradient(to right bottom, ${theme.left} 35%, ${theme.bg} 35% 65%, ${theme.right} 65%)`}"
+                  :disabled="!isBasic"
+                  @click="selectTheme(theme)">
+                </button>
+              </div>
+
+              <h3 class="mr-4">Include Icon</h3>
+              <div class="flex my-2">
+                <button
+                  v-for="icon in iconOptions"
+                  v-bind:key="icon.value"
+                  v-bind:class="{ 'bg-primary-dark ring-2 ring-primary-darker': iconSelected === icon.value }"
+                  v-on:click="iconSelected = icon.value"
+                  class="btn btn-primary mr-2 my-2"
+                  :disabled="isBasic">
+                  {{ icon.name }}
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="footer">
-      <div class="wrapper">
-        <div class="flex justify-between my-4">
-          <p class="my-auto">&copy; The University of Adelaide</p>
-          <img src="./assets/uoa-logo.png" width="200" alt="" />
+    <div>
+      <div class="download-section mt-4 py-8 text-center">
+        <h3 class="text-center mb-4">Upon Completion</h3>
+        <div>
+          <button class="btn-secondary" @click="capture">Download Banner</button>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="wrapper">
+          <div class="flex justify-between my-4">
+            <p class="my-auto">&copy; The University of Adelaide</p>
+            <img src="./assets/uoa-logo.png" width="200" alt="" />
+          </div>
         </div>
       </div>
     </div>
